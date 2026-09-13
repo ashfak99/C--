@@ -33,7 +33,7 @@ void selectionSort(vector<int>& nums)
     }
 }
 
-int insertionSort(vector<int>& nums)
+void insertionSort(vector<int>& nums)
 {
     int n=nums.size();
     for (int i = 1; i < n; i++)
