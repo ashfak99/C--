@@ -4,6 +4,7 @@
 
 using namespace std;
 
+typedef pair<int,int> P;
 
 // Breadth First Search
 vector<int> bfs(vector<vector<int>>& adj)
@@ -42,10 +43,7 @@ vector<int> bfs(vector<vector<int>>& adj)
 
 
 // Depth First Search
-void dfs(int start,
-         vector<vector<int>>& adj,
-         vector<bool>& visited,
-         vector<int>& ls)
+void dfs(int start, vector<vector<int>>& adj, vector<bool>& visited, vector<int>& ls)
 {
     visited[start] = true;
     ls.push_back(start);
@@ -76,6 +74,41 @@ vector<int> dfsGraph(vector<vector<int>>& adj)
 }
 
 
+   //PRIM'S AGORITHMS
+
+int primsAlgorithm(vector<vector<P>>& adj)
+{
+    int v=adj.size();
+    priority_queue<P, vector<P>, greater<P>> pq;
+    pq.push({0,0});
+
+    vector<bool> inMST(v,false);
+
+    int sum=0;
+    while (!pq.empty())
+    {
+        auto p=pq.top();
+        pq.pop();
+        int wt=p.first;
+        int node=p.second;
+        if(inMST[node]){
+            continue;}
+        inMST[node]=true;
+        sum+=wt;
+        for(auto& temp:adj[node])
+        {
+            int neighbour=temp.first;
+            int neighbour_wt=temp.second;
+            if (!inMST[neighbour])
+            {
+                pq.push({neighbour_wt, neighbour});
+            }
+        }
+    }
+    return sum;
+}
+
+
 int main()
 {
     int n, m;
@@ -84,42 +117,23 @@ int main()
     cin >> n >> m;
 
     // 1-based indexing
-    vector<vector<int>> adj(n + 1);
+    vector<vector<pair<int,int>>> adj(n + 1);
 
     for (int i = 0; i < m; i++)
     {
-        int u, v;
+        int u, v,w;
 
-        cout << "Enter the both endvertices : ";
-        cin >> u >> v;
+        cout << "Enter the both endvertices and weight : ";
+        cin >> u >> v >> w;
 
         // Undirected graph
-        adj[u].push_back(v);
-        adj[v].push_back(u);
+        adj[u].push_back({v,w});
+        adj[v].push_back({u,w});
     }
 
+    int cost=primsAlgorithm(adj);
 
-    // BFS
-    cout << "BFS : ";
-
-    vector<int> bfsResult = bfs(adj);
-
-    for (int node : bfsResult)
-    {
-        cout << node << " ";
-    }
-
-
-    // DFS
-    cout << "\nDFS : ";
-
-    vector<int> dfsResult = dfsGraph(adj);
-
-    for (int node : dfsResult)
-    {
-        cout << node << " ";
-    }
-
+    cout<<"Cost : "<<cost;
 
     return 0;
 }
