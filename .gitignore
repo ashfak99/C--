@@ -6,6 +6,8 @@
 *.d
 .cph
 .vscode
+input.txt
+output.txt
 
 # Compiled Object files
 *.slo
